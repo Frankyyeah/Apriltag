@@ -15,13 +15,9 @@ options = apriltag.DetectorOptions(families="tag36h11")
 detector = apriltag.Detector(options)
 
 # Increase the font scale for larger text
-font_scale = 1.2
+font_scale = 1.5
 
-while True:
-    success, image = cap.read()
-    if not success:
-        break
-
+def process_image(image):
     l_channel, a, b = cv2.split(image)
 
     clahe = cv2.createCLAHE(clipLimit=15.0, tileGridSize=(10, 10))
@@ -30,6 +26,15 @@ while True:
     seper = cv2.merge((cl, a, b))
 
     gray = cv2.cvtColor(seper, cv2.COLOR_BGRA2GRAY)
+
+    return gray
+
+while True:
+    success, image = cap.read()
+    if not success:
+        break
+
+    gray = process_image(image)
 
     results = detector.detect(gray)
 
