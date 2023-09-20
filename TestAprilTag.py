@@ -14,6 +14,9 @@ print(" [INFO] Detection of AprilTags...")
 options = apriltag.DetectorOptions(families="tag36h11")
 detector = apriltag.Detector(options)
 
+# Increase the font scale for larger text
+font_scale = 1.2
+
 while True:
     success, image = cap.read()
     if not success:
@@ -45,9 +48,13 @@ while True:
         (cX, cY) = (int(r.center[0]), int(r.center[1]))
         cv2.circle(image, (cX, cY), 5, (0, 0, 255), -1)
 
-        # Draw the tag family on the image
+        # Draw the tag family and ID on the image with larger text
         tagFamily = r.tag_family.decode("utf-8")
-        cv2.putText(image, tagFamily, (ptA[0], ptA[1] - 15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+        tagID = r.tag_id
+        text = f"{tagFamily}: {tagID}"
+
+        # Adjust the font size by modifying the font_scale parameter
+        cv2.putText(image, text, (ptA[0], ptA[1] - 15), cv2.FONT_HERSHEY_SIMPLEX, font_scale, (0, 255, 0), 2)
 
     cv2.imshow("Image", image)
 
